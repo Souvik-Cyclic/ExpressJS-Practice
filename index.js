@@ -4,6 +4,18 @@ const port = 3000;
 
 app.use(express.json());
 
+function logger(req, res, next) {
+    const method = req.method;
+    const ip = req.ip;
+    const hostname = req.hostname;
+    const date = new Date().toISOString();
+
+    console.log(`[${date}] ${method} request from ${ip} to ${hostname}${req.originalUrl}`);
+    next();
+}
+
+app.use(logger);
+
 let courses = [
     { id: 1, name: "java" },
     { id: 2, name: "javascript" },
@@ -44,6 +56,14 @@ app.delete('/courses/:id', (req, res) => {
     const deletedCourse = courses.splice(courseIndex, 1);
     res.json(deletedCourse[0]);
 });
+
+// function middleware(req, res, next) {
+//     console.log("called");
+//     next()
+// }
+
+//logger
+//method, ip, hostname, date
 
 app.listen(port, () => {
     console.log(`Server started`);
