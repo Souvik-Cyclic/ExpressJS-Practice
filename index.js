@@ -23,6 +23,28 @@ app.post('/courses', (req, res) => {
     res.status(201).json(newCourse);
 });
 
+//put call update id 1 to spring
+app.put('/courses/:id', (req, res) => {
+    const courseId = parseInt(req.params.id);
+    const courseToUpdate = courses.find(course => course.id === courseId);
+    if (!courseToUpdate) {
+        return res.status(404).send('Course not found');
+    }
+    courseToUpdate.name = req.body.name;
+    res.json(courseToUpdate);
+});
+
+//delete call delete id 2
+app.delete('/courses/:id', (req, res) => {
+    const courseId = parseInt(req.params.id);
+    const courseIndex = courses.findIndex(course => course.id === courseId);
+    if (courseIndex === -1) {
+        return res.status(404).send('Course not found');
+    }
+    const deletedCourse = courses.splice(courseIndex, 1);
+    res.json(deletedCourse[0]);
+});
+
 app.listen(port, () => {
     console.log(`Server started`);
 });
